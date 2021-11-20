@@ -3,7 +3,7 @@ package com.lojbrooks.munro.data
 import com.lojbrooks.munro.domain.model.Munro
 import com.lojbrooks.munro.domain.model.MunroType
 
-class MunroMapper {
+internal class MunroMapper {
 
     fun toDomain(csvLine: String): Munro? {
         val split = csvLine.split(",")

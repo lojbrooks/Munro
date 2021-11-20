@@ -2,7 +2,7 @@ package com.lojbrooks.munro.data
 
 import java.io.File
 
-class CsvParser(private val filePath: String) {
+internal class CsvParser(private val filePath: String) {
 
     fun readLines(): List<String> {
         val data = mutableListOf<String>()
