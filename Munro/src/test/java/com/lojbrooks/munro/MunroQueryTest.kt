@@ -1,6 +1,8 @@
 package com.lojbrooks.munro
 
 import com.lojbrooks.munro.domain.model.MunroType
+import com.lojbrooks.munro.domain.model.SortDirection
+import com.lojbrooks.munro.domain.model.SortedBy
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertTrue
@@ -37,5 +39,49 @@ class MunroQueryTest {
         val result2 = dataSet2.query(type = MunroType.TOP)
         assertThat(result2.size, equalTo(4))
         assertTrue(result2.all { it.type == MunroType.TOP })
+    }
+
+    @Test
+    fun `GIVEN sort by name ascending WHEN query THEN return sorted`() {
+        val result1 = dataSet1.query(sortedBy = SortedBy.Name(SortDirection.ASCENDING))
+        assertThat(result1[0].name, equalTo("Ben Chonzie"))
+        assertThat(result1[9].name, equalTo("Stuc a' Chroin"))
+
+        val result2 = dataSet2.query(sortedBy = SortedBy.Name(SortDirection.ASCENDING))
+        assertThat(result2[0].name, equalTo("An Caisteal"))
+        assertThat(result2[19].name, equalTo("Cruach Ardrain - Stob Garbh SE Top"))
+    }
+
+    @Test
+    fun `GIVEN sort by name descending WHEN query THEN return sorted`() {
+        val result1 = dataSet1.query(sortedBy = SortedBy.Name(SortDirection.DESCENDING))
+        assertThat(result1[0].name, equalTo("Stuc a' Chroin"))
+        assertThat(result1[9].name, equalTo("Ben Chonzie"))
+
+        val result2 = dataSet2.query(sortedBy = SortedBy.Name(SortDirection.DESCENDING))
+        assertThat(result2[0].name, equalTo("Cruach Ardrain - Stob Garbh SE Top"))
+        assertThat(result2[19].name, equalTo("An Caisteal"))
+    }
+
+    @Test
+    fun `GIVEN sort by height ascending WHEN query THEN return sorted`() {
+        val result1 = dataSet1.query(sortedBy = SortedBy.Height(SortDirection.ASCENDING))
+        assertThat(result1[0].height, equalTo(923.0))
+        assertThat(result1[9].height, equalTo(1174.0))
+
+        val result2 = dataSet2.query(sortedBy = SortedBy.Height(SortDirection.ASCENDING))
+        assertThat(result2[0].height, equalTo(901.7))
+        assertThat(result2[19].height, equalTo(1130.0))
+    }
+
+    @Test
+    fun `GIVEN sort by height descending WHEN query THEN return sorted`() {
+        val result1 = dataSet1.query(sortedBy = SortedBy.Height(SortDirection.DESCENDING))
+        assertThat(result1[9].height, equalTo(923.0))
+        assertThat(result1[0].height, equalTo(1174.0))
+
+        val result2 = dataSet2.query(sortedBy = SortedBy.Height(SortDirection.DESCENDING))
+        assertThat(result2[19].height, equalTo(901.7))
+        assertThat(result2[0].height, equalTo(1130.0))
     }
 }
