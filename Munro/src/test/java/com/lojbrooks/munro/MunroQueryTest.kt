@@ -7,6 +7,7 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.lang.IllegalArgumentException
 
 class MunroQueryTest {
 
@@ -83,5 +84,22 @@ class MunroQueryTest {
         val result2 = dataSet2.query(sortedBy = SortedBy.Height(SortDirection.DESCENDING))
         assertThat(result2[19].height, equalTo(901.7))
         assertThat(result2[0].height, equalTo(1130.0))
+    }
+
+    @Test
+    fun `GIVEN limit set to n WHEN query THEN return first n items`() {
+        assertThat(dataSet1.query(limit = 5).size, equalTo(5))
+        assertThat(dataSet2.query(limit = 6).size, equalTo(6))
+    }
+
+    @Test
+    fun `GIVEN limit greater than number of munro WHEN query THEN return all data`() {
+        assertThat(dataSet1.query(limit = 11).size, equalTo(10))
+        assertThat(dataSet2.query(limit = 21).size, equalTo(20))
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `GIVEN limit less than 1 WHEN query THEN throw`() {
+        dataSet1.query(limit = 0)
     }
 }

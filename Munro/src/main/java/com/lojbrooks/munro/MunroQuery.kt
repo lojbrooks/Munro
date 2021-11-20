@@ -17,23 +17,32 @@ class MunroQuery(filePath: String = DEFAULT_DATA_FILE) {
         mapper = MunroMapper()
     )
 
-    fun query(type: MunroType? = null, sortedBy: SortedBy? = null): List<Munro> {
-        return munroRepository.getAllMunros()
-            .filter { type == null || it.type == type }
-            .sortedWith(getSortComparator(sortedBy))
+    fun query(
+        type: MunroType? = null,
+        sortedBy: SortedBy? = null,
+        limit: Int? = null
+    ): List<Munro> {
+        require(limit == null || limit > 0)
+        
+        var list = munroRepository.getAllMunros()
+
+        if (type != null) list = list.filter { it.type == type }
+        if (sortedBy != null) list = list.sortedWith(getSortComparator(sortedBy))
+        if (limit != null) list = list.take(limit)
+
+        return list
     }
 
-    private fun getSortComparator(sortedBy: SortedBy?): Comparator<in Munro> {
-        return when(sortedBy) {
-            is SortedBy.Name -> when(sortedBy.direction) {
+    private fun getSortComparator(sortedBy: SortedBy): Comparator<in Munro> {
+        return when (sortedBy) {
+            is SortedBy.Name -> when (sortedBy.direction) {
                 SortDirection.ASCENDING -> compareBy { it.name }
                 SortDirection.DESCENDING -> compareByDescending { it.name }
             }
-            is SortedBy.Height -> when(sortedBy.direction) {
+            is SortedBy.Height -> when (sortedBy.direction) {
                 SortDirection.ASCENDING -> compareBy { it.height }
                 SortDirection.DESCENDING -> compareByDescending { it.height }
             }
-            else -> compareBy { 0 }
         }
     }
 
