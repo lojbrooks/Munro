@@ -7,23 +7,21 @@ internal class MunroMapper {
 
     fun toDomain(csvLine: String): Munro? {
         val split = csvLine.split(",")
-        return if (split.size == EXPECTED_COLUMN_SIZE) {
-            val name = split[NAME_INDEX]
-            val height = split[HEIGHT_INDEX]
-            val gridRef = split[GRID_REF_INDEX]
-            val type = split[TYPE_INDEX]
-            if (name.isNotBlank()) {
-                Munro(
-                    name = name,
-                    height = height.toDouble(),
-                    gridRef = gridRef,
-                    type = when (type) {
-                        "TOP" -> MunroType.TOP
-                        "MUN" -> MunroType.MUNRO
-                        else -> null
-                    }
-                )
-            } else null
+        val name = split[NAME_INDEX]
+        val height = split[HEIGHT_INDEX]
+        val gridRef = split[GRID_REF_INDEX]
+        val type = split[TYPE_INDEX]
+        return if (listOf(name, height, gridRef).all { it.isNotBlank() }) {
+            Munro(
+                name = name,
+                height = height.toDouble(),
+                gridRef = gridRef,
+                type = when (type) {
+                    "TOP" -> MunroType.TOP
+                    "MUN" -> MunroType.MUNRO
+                    else -> null
+                }
+            )
         } else null
     }
 
@@ -32,6 +30,5 @@ internal class MunroMapper {
         private const val HEIGHT_INDEX = 10
         private const val GRID_REF_INDEX = 14
         private const val TYPE_INDEX = 28
-        private const val EXPECTED_COLUMN_SIZE = 30
     }
 }

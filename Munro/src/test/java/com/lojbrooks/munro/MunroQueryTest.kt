@@ -17,7 +17,7 @@ class MunroQueryTest {
     @Test
     fun `GIVEN no filter WHEN query THEN return all data`() {
         assertThat(dataSet1.query().size, equalTo(10))
-        assertThat(dataSet2.query().size, equalTo(20))
+        assertThat(dataSet2.query().size, equalTo(21))
     }
 
     @Test
@@ -27,7 +27,7 @@ class MunroQueryTest {
         assertTrue(result1.all { it.type == MunroType.MUNRO })
 
         val result2 = dataSet2.query(type = MunroType.MUNRO)
-        assertThat(result2.size, equalTo(13))
+        assertThat(result2.size, equalTo(14))
         assertTrue(result2.all { it.type == MunroType.MUNRO })
     }
 
@@ -50,7 +50,7 @@ class MunroQueryTest {
 
         val result2 = dataSet2.query(sortedBy = SortedBy.Name(SortDirection.ASCENDING))
         assertThat(result2[0].name, equalTo("An Caisteal"))
-        assertThat(result2[19].name, equalTo("Cruach Ardrain - Stob Garbh SE Top"))
+        assertThat(result2[20].name, equalTo("Cruach Ardrain - Stob Garbh SE Top"))
     }
 
     @Test
@@ -61,7 +61,7 @@ class MunroQueryTest {
 
         val result2 = dataSet2.query(sortedBy = SortedBy.Name(SortDirection.DESCENDING))
         assertThat(result2[0].name, equalTo("Cruach Ardrain - Stob Garbh SE Top"))
-        assertThat(result2[19].name, equalTo("An Caisteal"))
+        assertThat(result2[20].name, equalTo("An Caisteal"))
     }
 
     @Test
@@ -72,7 +72,7 @@ class MunroQueryTest {
 
         val result2 = dataSet2.query(sortedBy = SortedBy.Height(SortDirection.ASCENDING))
         assertThat(result2[0].height, equalTo(901.7))
-        assertThat(result2[19].height, equalTo(1130.0))
+        assertThat(result2[20].height, equalTo(1130.0))
     }
 
     @Test
@@ -82,7 +82,7 @@ class MunroQueryTest {
         assertThat(result1[0].height, equalTo(1174.0))
 
         val result2 = dataSet2.query(sortedBy = SortedBy.Height(SortDirection.DESCENDING))
-        assertThat(result2[19].height, equalTo(901.7))
+        assertThat(result2[20].height, equalTo(901.7))
         assertThat(result2[0].height, equalTo(1130.0))
     }
 
@@ -95,7 +95,7 @@ class MunroQueryTest {
     @Test
     fun `GIVEN limit greater than number of munro WHEN query THEN return all data`() {
         assertThat(dataSet1.query(limit = 11).size, equalTo(10))
-        assertThat(dataSet2.query(limit = 21).size, equalTo(20))
+        assertThat(dataSet2.query(limit = 22).size, equalTo(21))
     }
 
     @Test(expected = IllegalArgumentException::class)
@@ -121,7 +121,7 @@ class MunroQueryTest {
         assertTrue(result1.all { it.height <= 1000.0 })
 
         val result2 = dataSet2.query(maxHeight = 1000.0)
-        assertThat(result2.size, equalTo(15))
+        assertThat(result2.size, equalTo(16))
         assertTrue(result2.all { it.height <= 1000.0 })
     }
 
