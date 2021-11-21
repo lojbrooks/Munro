@@ -102,4 +102,41 @@ class MunroQueryTest {
     fun `GIVEN limit less than 1 WHEN query THEN throw`() {
         dataSet1.query(limit = 0)
     }
+
+    @Test
+    fun `GIVEN filter by min height WHEN query THEN return only munros above min height`() {
+        val result1 = dataSet1.query(minHeight = 1000.0)
+        assertThat(result1.size, equalTo(4))
+        assertTrue(result1.all { it.height >= 1000.0 })
+
+        val result2 = dataSet2.query(minHeight = 1000.0)
+        assertThat(result2.size, equalTo(5))
+        assertTrue(result2.all { it.height >= 1000.0 })
+    }
+
+    @Test
+    fun `GIVEN filter by max height WHEN query THEN return only munros below max height`() {
+        val result1 = dataSet1.query(maxHeight = 1000.0)
+        assertThat(result1.size, equalTo(6))
+        assertTrue(result1.all { it.height <= 1000.0 })
+
+        val result2 = dataSet2.query(maxHeight = 1000.0)
+        assertThat(result2.size, equalTo(15))
+        assertTrue(result2.all { it.height <= 1000.0 })
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `GIVEN minHeight less than 0 WHEN query THEN throw`() {
+        dataSet1.query(minHeight = -1.0)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `GIVEN maxHeight less than 0 WHEN query THEN throw`() {
+        dataSet1.query(maxHeight = -1.0)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `GIVEN maxHeight less than minHeiht WHEN query THEN throw`() {
+        dataSet1.query(minHeight = 1000.0, maxHeight = 900.0)
+    }
 }
